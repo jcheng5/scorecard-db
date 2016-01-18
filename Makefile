@@ -34,7 +34,11 @@ output/merged.csv : working/00header.csv $(OUTFILES)
 	mkdir -p output
 	cat working/*.csv > output/merged.csv
 
-output/CollegeScorecard.sqlite : output/merged.csv
+bootstrap_r :
+	# Ensure packrat has been bootstrapped
+	R --vanilla --slave -f packrat/init.R --args --bootstrap-packrat
+
+output/CollegeScorecard.sqlite : output/merged.csv bootstrap_r
 	rm -f $@
 	Rscript normalize_data.R
 
