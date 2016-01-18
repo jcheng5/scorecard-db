@@ -6,4 +6,4 @@ License: GPL-3
 
 ### Instructions
 
-Run `make` in the repo directory.
+In the repo directory, run `make download`, then `make`. The output will be put in `output/CollegeScorecard.sqlite`.
