@@ -5,6 +5,13 @@ OUTFILES := $(subst $(DATADIR),working,$(INFILES))
 
 all : output/CollegeScorecard.sqlite
 
+CollegeScorecard_Raw_Data.zip :
+	wget https://s3.amazonaws.com/ed-college-choice-public/CollegeScorecard_Raw_Data.zip
+
+$(DATADIR)/MERGED1996_PP.csv : CollegeScorecard_Raw_Data.zip
+	unzip CollegeScorecard_Raw_Data.zip
+	touch $@
+
 working/00header.csv : $(DATADIR)/MERGED1996_PP.csv
 	mkdir -p working
 	printf YEAR, > "$@"
@@ -19,12 +26,16 @@ clean :
 	rm -f working/*
 	rm -f output/*
 
+purge : clean
+	rm -rf CollegeScorecard_Raw_Data CollegeScorecard_Raw_Data.zip
+
 output/merged.csv : working/00header.csv $(OUTFILES)
 	# Just cat together all cleaned CSVs, including header
 	mkdir -p output
 	cat working/*.csv > output/merged.csv
 
 output/CollegeScorecard.sqlite : output/merged.csv
+	rm -f $@
 	Rscript normalize_data.R
 
 # add leading zeroes to floats
