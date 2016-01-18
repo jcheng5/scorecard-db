@@ -1,0 +1,7 @@
+packrat/lib*/
+packrat/src/
+.Rproj.user
+output/
+working/
+CollegeScorecard_Raw_Data/
+.Rhistory
