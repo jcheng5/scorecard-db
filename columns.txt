@@ -1,0 +1,17 @@
+year
+id
+cost.avg_net_price.overall
+admissions.admission_rate.overall
+earnings.10_yrs_after_entry.median
+cost.net_price.private.by_income_level.*
+cost.net_price.public.by_income_level.*
+school.name
+school.city
+school.state
+student.size
+school.school_url
+school.degrees_awarded.predominant
+school.ownership
+school.locale
+location.lat
+location.lon
