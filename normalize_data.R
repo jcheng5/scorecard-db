@@ -80,7 +80,7 @@ normalized <- function(n_max = -1, progress = interactive()) {
     } else if (length(datacol) == 2) {
       a <- merged[[datacol[[1]]]]
       b <- merged[[datacol[[2]]]]
-      a | b
+      ifelse(is.na(a), b, ifelse(is.na(b), a, a | b))
     } else {
       stop("unexpected arity of calculated field ", datacol)
     }
