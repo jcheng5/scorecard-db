@@ -38,7 +38,7 @@ bootstrap_r :
 	# Ensure packrat has been bootstrapped
 	R --vanilla --slave -f packrat/init.R --args --bootstrap-packrat
 
-output/CollegeScorecard.sqlite : output/merged.csv | bootstrap_r
+output/CollegeScorecard.sqlite : output/merged.csv columns.txt | bootstrap_r
 	rm -f $@
 	Rscript normalize_data.R
 

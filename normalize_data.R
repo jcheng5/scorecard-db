@@ -94,7 +94,13 @@ latestSchoolNames <- function(normalized_data) {
   normalized_data %>%
     arrange(desc(year)) %>%
     group_by(id) %>%
-    summarise(school.name = head(school.name, 1)) %>%
+    summarise(
+      school.name = head(school.name, 1),
+      school.city = head(school.city, 1),
+      school.state = head(school.state, 1),
+      location.lat = head(location.lat, 1),
+      location.lon = head(location.lon, 1)
+    ) %>%
     as.data.frame()
 }
 
@@ -103,7 +109,18 @@ writeToSQLite <- function(n_max = -1, progress = interactive()) {
   conn <- dbConnect(SQLite(), dbname = "output/CollegeScorecard.sqlite")
   on.exit(dbDisconnect(conn))
   
-  dbWriteTable(conn, "data", ndata)
+  cols <- readLines("columns.txt")
+  cols <- cols[nzchar(cols)]
+  matched_cols <- sapply(cols, function(col) {
+    grep(glob2rx(col, trim.tail = FALSE), names(ndata))
+  })
+  if (any(sapply(matched_cols, length) == 0)) {
+    stop("Unmatched column(s) detected: ", cols[sapply(matched_cols, length) == 0])
+  }
+  
+  matched_cols_clean <- sort(unique(unlist(matched_cols)))
+  
+  dbWriteTable(conn, "data", ndata[, matched_cols_clean])
   dbGetQuery(conn, 'CREATE INDEX idx_data_id ON data (id);')
   dbGetQuery(conn, 'CREATE INDEX idx_data_school_name ON data ("school.name");')
   
