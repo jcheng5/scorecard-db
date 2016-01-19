@@ -1,6 +1,6 @@
 Turn [College Scorecard data](https://collegescorecard.ed.gov/data/) into SQLite database.
 
-Requires make, R (written on 3.2.3), and wget.
+Requires make, R (written on 3.2.3), and wget. Currently only works on OS X due to `sed` issues.
 
 License: GPL-3
 
